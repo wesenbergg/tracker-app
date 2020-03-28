@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import Spacer from '../components/Spacer'
 import { StyleSheet, View } from 'react-native'
 import { Input, Text, Button } from 'react-native-elements'
@@ -13,12 +13,16 @@ const showIcon = (iconName) => (
 const SigninScreen = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const { logIn, state } = useContext(AuthContext)
+  const { logIn, state, trySignIn } = useContext(AuthContext)
+
+  useEffect(() => {
+    trySignIn()
+  }, [])
 
   const handleLogIn = () => {
-    logIn({username, password}, () => console.log('callback'))
+    logIn({username, password})
   }
-  console.log(state)
+
   return (
     <View style={styles.container}>
       <Spacer>

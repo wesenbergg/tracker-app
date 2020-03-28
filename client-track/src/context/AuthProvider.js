@@ -1,9 +1,12 @@
 import dataContext from './dataContext';
+import { AsyncStorage } from 'react-native'
+import { navigate } from '../navigationRef';
+import { useEffect } from 'react';
 
 const authReducer = (state, action) => {
   switch (action.type) {
     case 'log_in':
-      return {...state, isLoggedIn: true}
+      return { ...state, token: action.payload.token }
     case 'log_out':
       return {...state, isLoggedIn: false}
     case 'add_error':
@@ -13,9 +16,15 @@ const authReducer = (state, action) => {
   }
 }
 
-const logIn = (dispatch) => async (credentials, callback) => {
-  const res = true //TODO: POST LOGIN
-  (res) ? callback(): dispatch({ type: 'add_error', payload: {eMessage: 'Wrong credentials'} })
+const logIn = (dispatch) => async (credentials) => {
+  try {
+    const res = 'token' //TODO: POST LOGIN
+    dispatch({ type: 'log_in', payload: { token: res } }) //response.data.token
+    await AsyncStorage.setItem('token', 'token')
+    navigate('Home')
+  } catch(e){
+    dispatch({ type: 'add_error', payload: {eMessage: 'Wrong credentials'} })
+  }  
 }
 
 const logOut = (dispatch) => (credentials, callback) => {
@@ -23,8 +32,18 @@ const logOut = (dispatch) => (credentials, callback) => {
   callback()
 }
 
+const trySignIn = (dispatch) => async () => {
+  try{
+    const token = await AsyncStorage.getItem('token')
+    if(!token) return navigate('Signin')
+
+    dispatch({ type: 'log_in', payload: token })
+    navigate('Home')
+  }catch(e){}
+}
+
 export const { Context, Provider } = dataContext(
   authReducer, //reducer
-  { logIn, logOut }, //actions
-  [{ isLoggedIn: false }] //initial state
+  { logIn, logOut, trySignIn }, //actions
+  { token: null } //initial state
 )
