@@ -1,10 +1,8 @@
 import React from 'react'
-import {  createAppContainer,
-          createSwitchNavigator,
-        } from 'react-navigation'
+import {  createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
-import { Provider } from './src/context/BlogContext'
+import { Provider } from './src/context/AuthProvider'
 import HomeScreen from './src/screens/HomeScreen'
 import AccountScreen from './src/screens/AccountScreen'
 import SigninScreen from './src/screens/SigninScreen'
@@ -27,22 +25,6 @@ const switchNavigator = createSwitchNavigator({
     })
   })
 })
-/*
-const navigator = createStackNavigator(
-  {
-    Home: HomeScreen,
-    Account: AccountScreen,
-    Create: TrackCreateScreen,
-    Detail: TrackDetailScreen,
-    List: TrackListScreen
-  },
-  {
-    initialRouteName: "Home",
-    defaultNavigationOptions: {
-      title: "Tracker app"
-    }
-  }
-)*/
 
 const App = createAppContainer(switchNavigator)
 
