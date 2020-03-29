@@ -1,1 +1,3 @@
-# tracker-app
+# Tracker app
+
+Application for tracking your movement
